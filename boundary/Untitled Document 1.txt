@@ -1,0 +1,56 @@
+#include "boundArray.h"
+
+BoundArray::BoundArray(int size)
+: Array(size)
+{}
+
+BoundArray::BoundArray(const int *pNum, int size)
+: Array(pNum, size)
+{}
+
+BoundArray::BoundArray(const Boundary& rhs)
+: Array(rhs.upper() - rhs.lower() + 1)
+{
+    int j = 0;
+    for (int i = rhs.lower(); i <= rhs.upper(); ++i)
+    {
+        (*this)[j++] = rhs[i];
+    }
+}
+
+BoundArray::BoundArray(int lower, int upper)
+: Array(upper - lower + 1)
+{
+    int j = 0;
+    for (int i = lower; i <= upper; ++i)
+    {
+        (*this)[j++] = 0;
+    }
+}
+
+BoundArray::~BoundArray()
+{}
+
+BoundArray& BoundArray::operator=(const BoundArray& rhs)
+{
+    if (this != &rhs)
+    {
+        Array::operator=(rhs);
+    }
+    return *this;
+}
+
+bool BoundArray::operator==(const BoundArray& rhs)
+{
+    return this->Array::operator==((Array)rhs);
+}
+
+int BoundArray::lower() const
+{
+    return Array::size() == 0 ? 0 : Array::pType() - Array::pType()[-1];
+}
+
+int BoundArray::upper() const
+{
+    return Array::size() == 0 ? -1 : Array::pType() - Array::pType()[0] + Array::size() - 1;
+}
